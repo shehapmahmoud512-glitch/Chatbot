@@ -14,6 +14,9 @@ app = Flask(__name__,
             static_folder=os.path.join(base_dir, "static"), 
             template_folder=os.path.join(base_dir, "templates"))
 app.secret_key = os.environ.get('SECRET_KEY', 'sphinx_university_super_secret_key')
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
 
 db_url = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
 if db_url.startswith("postgres://"):
@@ -494,6 +497,10 @@ def admin_settings():
             
         return jsonify({"success": True, "message": "تم حفظ الإعدادات وتحديث البوت بنجاح!"})
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
+
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -509,4 +516,4 @@ with app.app_context():
     db.create_all()
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
