@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Sphinx University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #6c63ff;
+      --primary-dark: #5a52d5;
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #16213e;
+      --surface3: #0d1b2a;
+      --border: rgba(108,99,255,0.2);
+      --border2: rgba(255,255,255,0.07);
+      --text: #e0e0e0;
+      --text-muted: #8888aa;
+      --success: #00d2a0;
+      --danger: #ff6b6b;
+      --warning: #ffd93d;
+      --info: #00d2ff;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border2);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { font-size: 1.5rem; }
+    .logo-title { font-size: 1rem; font-weight: 600; color: #fff; }
+    .logo-sub { font-size: 0.75rem; color: var(--text-muted); display: block; }
+    .admin-badge {
+      font-size: 0.72rem; padding: 4px 12px;
+      background: rgba(108,99,255,0.15);
+      color: var(--primary);
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 20px;
+    }
+    .logout-btn {
+      background: rgba(255,107,107,0.1);
+      color: var(--danger);
+      border: 1px solid rgba(255,107,107,0.25);
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover { background: rgba(255,107,107,0.2); }
+
+    /* Layout */
+    .app { display: flex; flex: 1; }
+    nav {
+      width: 220px;
+      background: var(--surface);
+      border-left: 1px solid var(--border2);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+    }
+    .nav-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; margin-top: 8px; }
+    .nav-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      text-align: right;
+    }
+    .nav-btn:hover { background: rgba(108,99,255,0.08); color: var(--text); }
+    .nav-btn.active { background: rgba(108,99,255,0.15); color: var(--primary); font-weight: 500; }
+
+    /* Main */
+    main { flex: 1; padding: 2rem; overflow-y: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Stats row */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+    .stat-n { font-size: 2rem; font-weight: 700; color: #fff; }
+    .stat-l { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 1.2rem; }
+    .page-title { font-size: 1.4rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .page-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+    input, textarea, select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 0.875rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); }
+    textarea { resize: vertical; min-height: 80px; }
+    select option { background: var(--surface2); }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      border: none;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-danger { background: rgba(255,107,107,0.12); color: var(--danger); border: 1px solid rgba(255,107,107,0.25); }
+    .btn-danger:hover { background: rgba(255,107,107,0.22); }
+    .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(0,210,160,0.4); color: var(--success); }
+    .toast.error { border-color: rgba(255,107,107,0.4); color: var(--danger); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { text-align: right; font-weight: 500; font-size: 0.78rem; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--border2); white-space: nowrap; }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border2); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    .empty-row td { text-align: center; color: var(--text-muted); padding: 2rem; }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .tag-general { background: rgba(108,99,255,0.15); color: var(--primary); }
+    .tag-deadline { background: rgba(255,107,107,0.12); color: var(--danger); }
+    .tag-event { background: rgba(0,210,255,0.12); color: var(--info); }
+    .tag-exam { background: rgba(255,217,61,0.12); color: var(--warning); }
+    .tag-active { background: rgba(0,210,160,0.12); color: var(--success); }
+    .tag-inactive { background: rgba(136,136,170,0.12); color: var(--text-muted); }
+
+    /* Section divider */
+    hr { border: none; border-top: 1px solid var(--border2); margin: 1.5rem 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-icon">🎓</span>
+    <div>
+      <span class="logo-title">Smart Academic Advisor</span>
+      <span class="logo-sub">Sphinx University — Admin Panel</span>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="admin-badge">🛡️ Admin</span>
+    <button class="logout-btn" onclick="adminLogout()">تسجيل الخروج</button>
+  </div>
+</header>
+
+<div class="app">
+  <nav>
+    <span class="nav-label">الإدارة</span>
+    <button class="nav-btn active" onclick="showPage('overview')" id="nav-overview">📊 نظرة عامة</button>
+    <button class="nav-btn" onclick="showPage('exams')" id="nav-exams">📅 جداول الامتحانات</button>
+    <button class="nav-btn" onclick="showPage('announcements')" id="nav-announcements">📢 الإعلانات</button>
+    <button class="nav-btn" onclick="showPage('custom')" id="nav-custom">⚙️ بيانات مخصصة</button>
+  </nav>
+
+  <main>
+
+    <!-- ===== OVERVIEW PAGE ===== -->
+    <div id="page-overview" class="page active">
+      <p class="page-title">لوحة التحكم</p>
+      <p class="page-sub">Sphinx University — نظرة عامة على البيانات</p>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-n" id="stat-exams">—</div>
+          <div class="stat-l">📅 امتحانات مجدولة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n" id="stat-ann">—</div>
+          <div class="stat-l">📢 إعلانات نشطة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n" id="stat-custom">—</div>
+          <div class="stat-l">⚙️ بيانات مخصصة</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🤖 حالة البوت</h3>
+        <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.7">
+          البوت يقرأ تلقائياً من:<br>
+          ✅ <strong style="color:var(--text)">chatbot.txt</strong> — اللائحة الأساسية (ثابتة)<br>
+          ✅ <strong style="color:var(--text)">جداول الامتحانات</strong> — تُضاف لـ system prompt فوراً<br>
+          ✅ <strong style="color:var(--text)">الإعلانات النشطة</strong> — تُضاف لـ system prompt فوراً<br>
+          ✅ <strong style="color:var(--text)">البيانات المخصصة</strong> — admin_data.json تُضاف لـ system prompt<br>
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== EXAMS PAGE ===== -->
+    <div id="page-exams" class="page">
+      <p class="page-title">📅 جداول الامتحانات</p>
+      <p class="page-sub">أضف مواعيد الامتحانات — البوت سيرد عليها فوراً</p>
+
+      <div class="card">
+        <h3>إضافة امتحان جديد</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>اسم المادة *</label>
+            <input type="text" id="exam-course" placeholder="مثال: Introduction to AI"/>
+          </div>
+          <div class="form-group">
+            <label>كود المادة</label>
+            <input type="text" id="exam-code" placeholder="مثال: CS301"/>
+          </div>
+          <div class="form-group">
+            <label>تاريخ الامتحان *</label>
+            <input type="text" id="exam-date" placeholder="مثال: 15 June 2025"/>
+          </div>
+          <div class="form-group">
+            <label>الوقت</label>
+            <input type="text" id="exam-time" placeholder="مثال: 10:00 AM"/>
+          </div>
+          <div class="form-group">
+            <label>مكان الامتحان</label>
+            <input type="text" id="exam-location" placeholder="مثال: Hall A, Building 3"/>
+          </div>
+          <div class="form-group">
+            <label>ملاحظات</label>
+            <input type="text" id="exam-notes" placeholder="أي ملاحظات إضافية..."/>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addExam()">➕ إضافة الامتحان</button>
+      </div>
+
+      <div class="card">
+        <h3>الامتحانات المجدولة</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>المادة</th>
+                <th>الكود</th>
+                <th>التاريخ</th>
+                <th>الوقت</th>
+                <th>المكان</th>
+                <th>ملاحظات</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="exams-table">
+              <tr class="empty-row"><td colspan="7">لا توجد امتحانات بعد</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ANNOUNCEMENTS PAGE ===== -->
+    <div id="page-announcements" class="page">
+      <p class="page-title">📢 الإعلانات</p>
+      <p class="page-sub">أضف إعلانات — البوت سيذكرها للطلاب فوراً</p>
+
+      <div class="card">
+        <h3>إضافة إعلان جديد</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>عنوان الإعلان *</label>
+            <input type="text" id="ann-title" placeholder="مثال: تأجيل امتحان الرياضيات"/>
+          </div>
+          <div class="form-group">
+            <label>التصنيف</label>
+            <select id="ann-category">
+              <option value="general">عام</option>
+              <option value="deadline">موعد نهائي</option>
+              <option value="event">فعالية</option>
+              <option value="exam">امتحانات</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>محتوى الإعلان *</label>
+            <textarea id="ann-content" placeholder="اكتب تفاصيل الإعلان هنا..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addAnnouncement()">➕ نشر الإعلان</button>
+      </div>
+
+      <div class="card">
+        <h3>الإعلانات المنشورة</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>العنوان</th>
+                <th>التصنيف</th>
+                <th>المحتوى</th>
+                <th>الحالة</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="ann-table">
+              <tr class="empty-row"><td colspan="5">لا توجد إعلانات بعد</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CUSTOM DATA PAGE ===== -->
+    <div id="page-custom" class="page">
+      <p class="page-title">⚙️ بيانات مخصصة</p>
+      <p class="page-sub">أضف أي معلومة تريد البوت يعرفها — مثلاً روابط، أسماء دكاترة، قواعد خاصة</p>
+
+      <div class="card">
+        <h3>إضافة معلومة مخصصة</h3>
+        <div class="form-group">
+          <label>المفتاح (اسم المعلومة) *</label>
+          <input type="text" id="custom-key" placeholder="مثال: رابط البوابة، اسم عميد الكلية، رسوم التسجيل..."/>
+        </div>
+        <div class="form-group">
+          <label>القيمة (محتوى المعلومة) *</label>
+          <textarea id="custom-value" placeholder="اكتب المعلومة هنا..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="addCustom()">➕ حفظ المعلومة</button>
+      </div>
+
+      <div class="card">
+        <h3>البيانات المحفوظة</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>المفتاح</th>
+                <th>القيمة</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="custom-table">
+              <tr class="empty-row"><td colspan="3">لا توجد بيانات مخصصة بعد</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ==================== Navigation ====================
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  if (name === 'exams') loadExams();
+  if (name === 'announcements') loadAnnouncements();
+  if (name === 'custom') loadCustom();
+}
+
+// ==================== Toast ====================
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ==================== Admin Logout ====================
+async function adminLogout() {
+  await fetch('/admin/logout', { method: 'POST', credentials: 'include' });
+  window.location.href = '/admin/login';
+}
+
+// ==================== EXAMS ====================
+async function loadExams() {
+  const res = await fetch('/admin/api/exams', { credentials: 'include' });
+  const data = await res.json();
+  const tbody = document.getElementById('exams-table');
+  if (!data.exams || data.exams.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">لا توجد امتحانات بعد</td></tr>';
+    document.getElementById('stat-exams').textContent = 0;
+    return;
+  }
+  document.getElementById('stat-exams').textContent = data.exams.length;
+  tbody.innerHTML = data.exams.map(e => `
+    <tr>
+      <td style="font-weight:500">${e.course_name}</td>
+      <td><span class="tag tag-exam">${e.course_code || '—'}</span></td>
+      <td>${e.exam_date}</td>
+      <td>${e.exam_time || '—'}</td>
+      <td>${e.exam_location || '—'}</td>
+      <td style="color:var(--text-muted);font-size:0.8rem">${e.notes || '—'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteExam(${e.id})">حذف</button></td>
+    </tr>
+  `).join('');
+}
+
+async function addExam() {
+  const course = document.getElementById('exam-course').value.trim();
+  const date = document.getElementById('exam-date').value.trim();
+  if (!course || !date) { showToast('اسم المادة والتاريخ مطلوبان', 'error'); return; }
+  const body = {
+    course_name: course,
+    course_code: document.getElementById('exam-code').value.trim(),
+    exam_date: date,
+    exam_time: document.getElementById('exam-time').value.trim(),
+    exam_location: document.getElementById('exam-location').value.trim(),
+    notes: document.getElementById('exam-notes').value.trim(),
+  };
+  const res = await fetch('/admin/api/exams', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (data.success) {
+    showToast('✅ تمت إضافة الامتحان بنجاح');
+    ['exam-course','exam-code','exam-date','exam-time','exam-location','exam-notes'].forEach(id => document.getElementById(id).value = '');
+    loadExams();
+  } else {
+    showToast(data.error || 'خطأ', 'error');
+  }
+}
+
+async function deleteExam(id) {
+  if (!confirm('هل تريد حذف هذا الامتحان؟')) return;
+  const res = await fetch(`/admin/api/exams/${id}`, { method: 'DELETE', credentials: 'include' });
+  const data = await res.json();
+  if (data.success) { showToast('🗑️ تم الحذف'); loadExams(); }
+  else showToast(data.error || 'خطأ', 'error');
+}
+
+// ==================== ANNOUNCEMENTS ====================
+async function loadAnnouncements() {
+  const res = await fetch('/admin/api/announcements', { credentials: 'include' });
+  const data = await res.json();
+  const tbody = document.getElementById('ann-table');
+  const active = (data.announcements || []).filter(a => a.is_active);
+  document.getElementById('stat-ann').textContent = active.length;
+  if (!data.announcements || data.announcements.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">لا توجد إعلانات بعد</td></tr>';
+    return;
+  }
+  const catTag = { general: 'tag-general', deadline: 'tag-deadline', event: 'tag-event', exam: 'tag-exam' };
+  tbody.innerHTML = data.announcements.map(a => `
+    <tr>
+      <td style="font-weight:500">${a.title}</td>
+      <td><span class="tag ${catTag[a.category] || 'tag-general'}">${a.category}</span></td>
+      <td style="color:var(--text-muted);font-size:0.82rem;max-width:220px">${a.content.substring(0,100)}${a.content.length>100?'...':''}</td>
+      <td><span class="tag ${a.is_active ? 'tag-active' : 'tag-inactive'}">${a.is_active ? 'نشط' : 'معطل'}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-sm" style="background:rgba(108,99,255,0.12);color:var(--primary)" onclick="toggleAnn(${a.id})">${a.is_active ? 'تعطيل' : 'تفعيل'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAnn(${a.id})">حذف</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function addAnnouncement() {
+  const title = document.getElementById('ann-title').value.trim();
+  const content = document.getElementById('ann-content').value.trim();
+  if (!title || !content) { showToast('العنوان والمحتوى مطلوبان', 'error'); return; }
+  const body = { title, content, category: document.getElementById('ann-category').value };
+  const res = await fetch('/admin/api/announcements', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (data.success) {
+    showToast('✅ تم نشر الإعلان');
+    document.getElementById('ann-title').value = '';
+    document.getElementById('ann-content').value = '';
+    loadAnnouncements();
+  } else showToast(data.error || 'خطأ', 'error');
+}
+
+async function toggleAnn(id) {
+  const res = await fetch(`/admin/api/announcements/${id}/toggle`, { method: 'POST', credentials: 'include' });
+  const data = await res.json();
+  if (data.success) { showToast('✅ تم التحديث'); loadAnnouncements(); }
+  else showToast(data.error || 'خطأ', 'error');
+}
+
+async function deleteAnn(id) {
+  if (!confirm('هل تريد حذف هذا الإعلان؟')) return;
+  const res = await fetch(`/admin/api/announcements/${id}`, { method: 'DELETE', credentials: 'include' });
+  const data = await res.json();
+  if (data.success) { showToast('🗑️ تم الحذف'); loadAnnouncements(); }
+  else showToast(data.error || 'خطأ', 'error');
+}
+
+// ==================== CUSTOM DATA ====================
+async function loadCustom() {
+  const res = await fetch('/admin/api/settings', { credentials: 'include' });
+  const data = await res.json();
+  const tbody = document.getElementById('custom-table');
+  const entries = Object.entries(data.data || {});
+  document.getElementById('stat-custom').textContent = entries.length;
+  if (entries.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="3">لا توجد بيانات مخصصة بعد</td></tr>';
+    return;
+  }
+  tbody.innerHTML = entries.map(([k, v]) => `
+    <tr>
+      <td style="font-weight:500;color:var(--primary)">${k}</td>
+      <td style="color:var(--text-muted);font-size:0.85rem">${String(v).substring(0,120)}${String(v).length>120?'...':''}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteCustom('${k.replace(/'/g,"\\'")}')">حذف</button></td>
+    </tr>
+  `).join('');
+}
+
+async function addCustom() {
+  const key = document.getElementById('custom-key').value.trim();
+  const val = document.getElementById('custom-value').value.trim();
+  if (!key || !val) { showToast('المفتاح والقيمة مطلوبان', 'error'); return; }
+  const res = await fetch('/admin/api/settings', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ [key]: val })
+  });
+  const data = await res.json();
+  if (data.success) {
+    showToast('✅ تم حفظ المعلومة وتحديث البوت');
+    document.getElementById('custom-key').value = '';
+    document.getElementById('custom-value').value = '';
+    loadCustom();
+  } else showToast(data.error || 'خطأ', 'error');
+}
+
+async function deleteCustom(key) {
+  if (!confirm(`هل تريد حذف "${key}"؟`)) return;
+  const res = await fetch('/admin/api/settings/delete', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key })
+  });
+  const data = await res.json();
+  if (data.success) { showToast('🗑️ تم الحذف'); loadCustom(); }
+  else showToast(data.error || 'خطأ', 'error');
+}
+
+// ==================== Init ====================
+async function init() {
+  const [exRes, annRes, cusRes] = await Promise.all([
+    fetch('/admin/api/exams', { credentials: 'include' }),
+    fetch('/admin/api/announcements', { credentials: 'include' }),
+    fetch('/admin/api/settings', { credentials: 'include' }),
+  ]);
+  const exData = await exRes.json();
+  const annData = await annRes.json();
+  const cusData = await cusRes.json();
+  document.getElementById('stat-exams').textContent = (exData.exams || []).length;
+  document.getElementById('stat-ann').textContent = (annData.announcements || []).filter(a=>a.is_active).length;
+  document.getElementById('stat-custom').textContent = Object.keys(cusData.data || {}).length;
+}
+init();
+</script>
+</body>
+</html>

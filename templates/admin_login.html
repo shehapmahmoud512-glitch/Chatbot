@@ -1,204 +1,204 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل دخول الإدارة | Sphinx University</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338CA;
-            --bg-color: #0f172a;
-            --surface: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --error: #ef4444;
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-image: radial-gradient(circle at top right, #1e1b4b, var(--bg-color));
-        }
-
-        .login-card {
-            background-color: var(--surface);
-            padding: 3rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border-radius: 0.75rem;
-            background-color: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-light);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-            background-color: rgba(15, 23, 42, 0.8);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            background: linear-gradient(135deg, var(--primary), #6366f1);
-            color: white;
-            border: none;
-            font-family: inherit;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 1rem;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        #error-msg {
-            color: var(--error);
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 2rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-        
-        .back-link:hover {
-            color: var(--text-light);
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login — Sphinx University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #6c63ff;
+      --primary-dark: #5a52d5;
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #16213e;
+      --border: rgba(108,99,255,0.2);
+      --text: #e0e0e0;
+      --text-muted: #8888aa;
+      --danger: #ff6b6b;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .blob1 { width: 500px; height: 500px; background: #6c63ff; top: -150px; right: -100px; }
+    .blob2 { width: 400px; height: 400px; background: #00d2ff; bottom: -100px; left: -100px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .shield-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(0,210,255,0.1));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      margin-bottom: 1.5rem;
+    }
+    h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 4px; color: #fff; }
+    .subtitle { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      background: rgba(108,99,255,0.15);
+      color: var(--primary);
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+    input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus { border-color: var(--primary); }
+    input::placeholder { color: var(--text-muted); }
+    .error-msg {
+      background: rgba(255,107,107,0.1);
+      border: 1px solid rgba(255,107,107,0.3);
+      color: var(--danger);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .login-btn:hover { background: var(--primary-dark); }
+    .login-btn:active { transform: scale(0.98); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--primary); }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+  </style>
 </head>
 <body>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
 
-    <div class="login-card">
-        <div class="logo">لوحة الإدارة</div>
-        
-        <form id="loginForm">
-            <div class="form-group">
-                <label>اسم المستخدم</label>
-                <input type="text" id="username" required autocomplete="off">
-            </div>
-            
-            <div class="form-group">
-                <label>كلمة المرور</label>
-                <input type="password" id="password" required>
-            </div>
-            
-            <button type="submit" class="btn-submit">تسجيل الدخول</button>
-            <div id="error-msg"></div>
-        </form>
-        
-        <a href="/" class="back-link">← العودة للصفحة الرئيسية</a>
+  <div class="card">
+    <div class="shield-icon">🛡️</div>
+    <span class="badge">🔐 Admin Access Only</span>
+    <h2>تسجيل دخول المسؤول</h2>
+    <p class="subtitle">Sphinx University — لوحة تحكم الإدارة</p>
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <div class="form-group">
+      <label>اسم المستخدم</label>
+      <input type="text" id="username" placeholder="admin" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
     </div>
 
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const btn = document.querySelector(".btn-submit");
-            const errorMsg = document.getElementById("error-msg");
-            
-            btn.innerHTML = "جاري التحقق...";
-            btn.disabled = true;
-            errorMsg.style.opacity = "0";
+    <hr class="divider"/>
 
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+    <button class="login-btn" id="login-btn" onclick="doLogin()">دخول كمسؤول</button>
+    <a href="/" class="back-link">← العودة للواجهة الرئيسية</a>
+  </div>
 
-            try {
-                const res = await fetch("/admin/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await res.json();
-                
-                if (res.ok) {
-                    btn.innerHTML = "تم بنجاح!";
-                    btn.style.background = "#10b981";
-                    setTimeout(() => {
-                        window.location.href = "/admin/dashboard";
-                    }, 500);
-                } else {
-                    errorMsg.innerText = data.error || "حدث خطأ ما";
-                    errorMsg.style.opacity = "1";
-                    btn.innerHTML = "تسجيل الدخول";
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                errorMsg.innerText = "خطأ في الاتصال بالخادم";
-                errorMsg.style.opacity = "1";
-                btn.innerHTML = "تسجيل الدخول";
-                btn.disabled = false;
-            }
+  <script>
+    document.getElementById('password').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+
+    async function doLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorEl = document.getElementById('error-msg');
+      const btn = document.getElementById('login-btn');
+
+      errorEl.style.display = 'none';
+      if (!username || !password) {
+        errorEl.textContent = 'يرجى إدخال اسم المستخدم وكلمة المرور';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'جاري التحقق...';
+
+      try {
+        const res = await fetch('/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ username, password })
         });
-    </script>
+        const data = await res.json();
+        if (data.success) {
+          window.location.href = '/admin/dashboard';
+        } else {
+          errorEl.textContent = data.error || 'بيانات غير صحيحة';
+          errorEl.style.display = 'block';
+        }
+      } catch (e) {
+        errorEl.textContent = 'خطأ في الاتصال بالسيرفر';
+        errorEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'دخول كمسؤول';
+      }
+    }
+  </script>
 </body>
 </html>
