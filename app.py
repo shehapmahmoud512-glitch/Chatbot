@@ -342,7 +342,7 @@ Give ✅/❌ per requirement, overall verdict (CAN GRADUATE / CANNOT GRADUATE YE
 
 # ─── Admin ────────────────────────────────────────────────────────────────────
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin12345")
 
 def admin_required(f):
     from functools import wraps
